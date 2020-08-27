@@ -1,10 +1,10 @@
-properties([parameters([string(defaultValue: '', description: 'Please enter IP', name: 'nodeIP', trim: false), string(defaultValue: '', description: 'Please provide branch', name: 'BRANCHH', trim: false)])])
+properties([parameters([string(defaultValue: '', description: 'Please enter IP', name: 'nodeIP', trim: false), string(defaultValue: '', description: 'Please provide branch', name: 'DIVISION', trim: false)])])
 
 node {
     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-master-ssh-key1', keyFileVariable: 'SSHKEY', passphraseVariable: '', usernameVariable: 'SSHUSERNAME')]) {
 
         stage("Pull SCM") {
-            checkout([$class: 'GitSCM', branches: [[name: '*/${BRANCHH}']], 
+            checkout([$class: 'GitSCM', branches: [[name: '*/${DIVISION}']], 
             doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: 
             [[url: 'https://github.com/ikambarov/melodi']]])        
             }
