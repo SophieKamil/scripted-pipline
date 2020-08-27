@@ -1,10 +1,13 @@
-properties([parameters([string(defaultValue: '', description: 'Please provide the IP', name: 'nodeIP', trim: true)])])
+properties([parameters([string(defaultValue: '', description: 'Please enter IP', name: 'nodeIP', trim: false), string(defaultValue: '', description: 'Please provide branch', name: 'BRANCHH', trim: false)])])
+
 node {
     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-master-ssh-key1', keyFileVariable: 'SSHKEY', passphraseVariable: '', usernameVariable: 'SSHUSERNAME')]) {
 
         stage("Pull SCM") {
-            git 'https://github.com/ikambarov/melodi.git'
-        }
+            checkout([$class: 'GitSCM', branches: [[name: '*/${BRANCHH}']], 
+            doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: 
+            [[url: 'https://github.com/ikambarov/melodi']]])        
+            }
 
         stage('Install epel') {
 
@@ -22,5 +25,16 @@ node {
 
             sh 'ssh -o StrictHostKeyChecking=no -i $SSHKEY $SSHUSERNAME@${nodeIP}  systemctl start httpd'
         }
+        stage("Copy Files"){
+
+            sh 'scp -o StrictHostKeyChecking=no -i *  $SSHKEY $SSHUSERNAME@${nodeIP}:/var/www/html'
+        }
+        stage("Clean Workspace"){
+            cleanWs()
+        }
     }
 }
+
+
+
+
