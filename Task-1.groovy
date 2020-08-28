@@ -27,7 +27,7 @@ node {
         }
         stage("Copy Files"){
 
-            sh 'scp -o StrictHostKeyChecking=no -i *  $SSHKEY $SSHUSERNAME@${nodeIP}:/var/www/html'
+            sh 'scp -o StrictHostKeyChecking=no -i $SSHKEY -rv * $SSHUSERNAME@${nodeIP}:/var/www/html'
         }
         stage("Clean Workspace"){
             cleanWs()
