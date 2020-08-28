@@ -8,11 +8,11 @@ if (nodeIP?.trim()) {
     node {
         withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-master-ssh-key1', keyFileVariable: 'SSHKEY', passphraseVariable: '', usernameVariable: 'SSHUSERNAME')]) {
             stage('Pull Repo') {
-                git branch: '${branch}', changelog: false, poll: false, url: 'https://github.com/ikambarov/ansible-melodi.git'
+                git branch: 'master', changelog: false, poll: false, url: 'https://github.com/ikambarov/ansible-melodi.git'
             }
             withEnv(['ANSIBLE_HOST_KEY_CHECKING=False']) {
-                stage("Install Apache"){
-                    sh 'ansible-playbook -i "161.35.120.248," --private-key $SSHKEY main.yml'
+                stage("Install Playbook"){
+                    sh 'ansible-playbook -i "${nodeIP}," -e "melodi_branch=${branch}" --private-key $SSHKEY main.yml'
                     }
                 }  
             }  
