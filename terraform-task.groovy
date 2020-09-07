@@ -3,7 +3,7 @@ node{
         git branch: 'solution', changelog: false, poll: false, url: 'https://github.com/ikambarov/terraform-task.git'
     }
 
-    withCredentials([usernamePassword(credentialsId: 'jenkins-aws-access-key1', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+    withCredentials([usernamePassword(credentialsId: 'jenkins-aws-access-key', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
         stage("Terrraform Init"){
             sh '''
                 cd sandbox/
